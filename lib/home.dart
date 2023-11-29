@@ -1,3 +1,4 @@
+import 'package:_11_quotes_of_the_day/saved.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,6 +25,12 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('Best Quotes'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SavedPage())),
+            icon: const Icon(Icons.save_outlined),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.read<QuotesCubit>().refresh(),

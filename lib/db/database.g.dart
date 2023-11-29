@@ -488,9 +488,13 @@ class $QuotesTable extends Quotes with TableInfo<$QuotesTable, Quote> {
   $QuotesTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
   static const VerificationMeta _contentMeta =
       const VerificationMeta('content');
   @override
@@ -528,8 +532,6 @@ class $QuotesTable extends Quotes with TableInfo<$QuotesTable, Quote> {
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
     }
     if (data.containsKey('content')) {
       context.handle(_contentMeta,
@@ -561,13 +563,13 @@ class $QuotesTable extends Quotes with TableInfo<$QuotesTable, Quote> {
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Quote map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Quote(
       id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       content: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}content'])!,
       author: attachedDatabase.typeMapping
@@ -586,7 +588,7 @@ class $QuotesTable extends Quotes with TableInfo<$QuotesTable, Quote> {
 }
 
 class Quote extends DataClass implements Insertable<Quote> {
-  final String id;
+  final int id;
   final String content;
   final String author;
   final String authorSlug;
@@ -600,7 +602,7 @@ class Quote extends DataClass implements Insertable<Quote> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
+    map['id'] = Variable<int>(id);
     map['content'] = Variable<String>(content);
     map['author'] = Variable<String>(author);
     map['author_slug'] = Variable<String>(authorSlug);
@@ -622,7 +624,7 @@ class Quote extends DataClass implements Insertable<Quote> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Quote(
-      id: serializer.fromJson<String>(json['id']),
+      id: serializer.fromJson<int>(json['id']),
       content: serializer.fromJson<String>(json['content']),
       author: serializer.fromJson<String>(json['author']),
       authorSlug: serializer.fromJson<String>(json['authorSlug']),
@@ -633,7 +635,7 @@ class Quote extends DataClass implements Insertable<Quote> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
+      'id': serializer.toJson<int>(id),
       'content': serializer.toJson<String>(content),
       'author': serializer.toJson<String>(author),
       'authorSlug': serializer.toJson<String>(authorSlug),
@@ -642,7 +644,7 @@ class Quote extends DataClass implements Insertable<Quote> {
   }
 
   Quote copyWith(
-          {String? id,
+          {int? id,
           String? content,
           String? author,
           String? authorSlug,
@@ -680,39 +682,34 @@ class Quote extends DataClass implements Insertable<Quote> {
 }
 
 class QuotesCompanion extends UpdateCompanion<Quote> {
-  final Value<String> id;
+  final Value<int> id;
   final Value<String> content;
   final Value<String> author;
   final Value<String> authorSlug;
   final Value<int> length;
-  final Value<int> rowid;
   const QuotesCompanion({
     this.id = const Value.absent(),
     this.content = const Value.absent(),
     this.author = const Value.absent(),
     this.authorSlug = const Value.absent(),
     this.length = const Value.absent(),
-    this.rowid = const Value.absent(),
   });
   QuotesCompanion.insert({
-    required String id,
+    this.id = const Value.absent(),
     required String content,
     required String author,
     required String authorSlug,
     required int length,
-    this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        content = Value(content),
+  })  : content = Value(content),
         author = Value(author),
         authorSlug = Value(authorSlug),
         length = Value(length);
   static Insertable<Quote> custom({
-    Expression<String>? id,
+    Expression<int>? id,
     Expression<String>? content,
     Expression<String>? author,
     Expression<String>? authorSlug,
     Expression<int>? length,
-    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -720,24 +717,21 @@ class QuotesCompanion extends UpdateCompanion<Quote> {
       if (author != null) 'author': author,
       if (authorSlug != null) 'author_slug': authorSlug,
       if (length != null) 'length': length,
-      if (rowid != null) 'rowid': rowid,
     });
   }
 
   QuotesCompanion copyWith(
-      {Value<String>? id,
+      {Value<int>? id,
       Value<String>? content,
       Value<String>? author,
       Value<String>? authorSlug,
-      Value<int>? length,
-      Value<int>? rowid}) {
+      Value<int>? length}) {
     return QuotesCompanion(
       id: id ?? this.id,
       content: content ?? this.content,
       author: author ?? this.author,
       authorSlug: authorSlug ?? this.authorSlug,
       length: length ?? this.length,
-      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -745,7 +739,7 @@ class QuotesCompanion extends UpdateCompanion<Quote> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (id.present) {
-      map['id'] = Variable<String>(id.value);
+      map['id'] = Variable<int>(id.value);
     }
     if (content.present) {
       map['content'] = Variable<String>(content.value);
@@ -759,9 +753,6 @@ class QuotesCompanion extends UpdateCompanion<Quote> {
     if (length.present) {
       map['length'] = Variable<int>(length.value);
     }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
     return map;
   }
 
@@ -772,8 +763,7 @@ class QuotesCompanion extends UpdateCompanion<Quote> {
           ..write('content: $content, ')
           ..write('author: $author, ')
           ..write('authorSlug: $authorSlug, ')
-          ..write('length: $length, ')
-          ..write('rowid: $rowid')
+          ..write('length: $length')
           ..write(')'))
         .toString();
   }

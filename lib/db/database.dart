@@ -3,7 +3,7 @@ import 'package:drift/drift.dart';
 part 'database.g.dart';
 
 class Quotes extends Table {
-  TextColumn get id => text()();
+  IntColumn get id => integer().autoIncrement()();
   TextColumn get content => text()();
   TextColumn get author => text()();
   TextColumn get authorSlug => text()();
@@ -63,6 +63,7 @@ class QuoteDao extends DatabaseAccessor<AppDatabase> with _$QuoteDaoMixin {
   QuoteDao(this.db) : super(db);
 
   Stream<List<Quote>> watchQuotes() => select(quotes).watch();
+  Future deleteQuote(Insertable<Quote> quote) => delete(quotes).delete(quote);
   Future<int> insertQuote(Insertable<Quote> quote) => into(quotes).insert(quote);
 }
 

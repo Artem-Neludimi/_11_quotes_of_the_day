@@ -17,15 +17,6 @@ late AppDatabase db;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   db = AppDatabase(_openConnection());
-  // await db.quoteDao.insertQuote(
-  //   const Quote(
-  //     id: '',
-  //     content: 'Hello World',
-  //     author: 'Flutter',
-  //     authorSlug: 'flutter',
-  //     length: 11,
-  //   ),
-  // );
   prefs = await SharedPreferences.getInstance();
   runApp(const MyApp());
 }
