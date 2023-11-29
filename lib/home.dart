@@ -21,6 +21,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final state = context.watch<QuotesCubit>().state;
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.read<QuotesCubit>().refresh(),
+        child: const Icon(Icons.refresh),
+      ),
       body: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.all(16).copyWith(top: 32),
@@ -29,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
             : Column(
                 children: <Widget>[
                   Text(
-                    'Quote of the day',
+                    'Best quote',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 16),

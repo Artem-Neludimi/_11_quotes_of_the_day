@@ -33,6 +33,11 @@ class QuotesCubit extends Cubit<QuotesState> {
       emit(state.copyWith(searchResults: [], dataFound: false));
     }
   }
+
+  Future<void> refresh() async {
+    emit(state.copyWith(loading: true));
+    await init();
+  }
 }
 
 class QuotesState {
