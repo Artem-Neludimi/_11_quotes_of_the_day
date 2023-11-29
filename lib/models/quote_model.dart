@@ -1,6 +1,5 @@
 class QuoteModel {
   QuoteModel({
-    required this.tags,
     required this.id,
     required this.content,
     required this.author,
@@ -10,7 +9,6 @@ class QuoteModel {
     this.dateModified,
   });
 
-  final List<String> tags;
   final String id;
   final String content;
   final String author;
@@ -21,7 +19,6 @@ class QuoteModel {
 
   Map<String, dynamic> toJson() {
     return {
-      "tags": tags,
       "_id": id,
       "content": content,
       "author": author,
@@ -34,7 +31,6 @@ class QuoteModel {
 
   factory QuoteModel.fromJson(Map<String, dynamic> json) {
     return QuoteModel(
-      tags: List<String>.from(json["tags"].map((x) => x)),
       id: json["_id"],
       content: json["content"],
       author: json["author"],

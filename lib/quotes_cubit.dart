@@ -1,4 +1,4 @@
-import 'package:_11_quotes_of_the_day/models/qoute_model.dart';
+import 'package:_11_quotes_of_the_day/models/quote_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
