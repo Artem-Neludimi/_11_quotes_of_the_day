@@ -21,28 +21,23 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final state = context.watch<QuotesCubit>().state;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('1111'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '${state.a}',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: const FloatingActionButton(
-        onPressed: null,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+      body: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(16).copyWith(top: 32),
+        child: state.loading
+            ? const CircularProgressIndicator()
+            : Column(
+                children: <Widget>[
+                  Text(
+                    'Quote of the day',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(state.quoteOfTheDay!.content, style: Theme.of(context).textTheme.bodyLarge),
+                  const SizedBox(height: 8),
+                  Text(state.quoteOfTheDay!.author, style: Theme.of(context).textTheme.bodySmall),
+                ],
+              ),
       ),
     );
   }
