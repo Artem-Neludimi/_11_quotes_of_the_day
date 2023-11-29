@@ -36,6 +36,28 @@ class _MyHomePageState extends State<MyHomePage> {
                   Text(state.quoteOfTheDay!.content, style: Theme.of(context).textTheme.bodyLarge),
                   const SizedBox(height: 8),
                   Text(state.quoteOfTheDay!.author, style: Theme.of(context).textTheme.bodySmall),
+                  const SizedBox(height: 16),
+                  TextField(
+                    onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+                    onChanged: (value) => context.read<QuotesCubit>().searchQuote(value),
+                    decoration: const InputDecoration(
+                      hintText: 'Enter your name',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: state.searchResults.length,
+                      itemBuilder: (context, index) {
+                        final quote = state.searchResults[index];
+                        return ListTile(
+                          title: Text(quote.content),
+                          subtitle: Text(quote.author),
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
       ),
