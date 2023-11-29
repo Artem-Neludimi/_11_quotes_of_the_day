@@ -31,7 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Container(
         alignment: Alignment.center,
-        padding: const EdgeInsets.all(16).copyWith(top: 0),
+        padding: const EdgeInsets.all(16).copyWith(top: 8),
         child: state.loading
             ? const CircularProgressIndicator()
             : Column(
