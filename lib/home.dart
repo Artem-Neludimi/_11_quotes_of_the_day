@@ -38,26 +38,30 @@ class _MyHomePageState extends State<MyHomePage> {
                   Text(state.quoteOfTheDay!.author, style: Theme.of(context).textTheme.bodySmall),
                   const SizedBox(height: 16),
                   TextField(
+                    controller: context.read<QuotesCubit>().searchController,
                     onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
-                    onChanged: (value) => context.read<QuotesCubit>().searchQuote(value),
                     decoration: const InputDecoration(
-                      hintText: 'Enter your name',
+                      hintText: 'Enter search query',
                       border: OutlineInputBorder(),
+                      suffixIcon: Icon(Icons.search),
                     ),
                   ),
                   const SizedBox(height: 8),
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: state.searchResults.length,
-                      itemBuilder: (context, index) {
-                        final quote = state.searchResults[index];
-                        return ListTile(
-                          title: Text(quote.content),
-                          subtitle: Text(quote.author),
-                        );
-                      },
-                    ),
-                  ),
+                    child: switch (state.dataFound) {
+                      false => const Center(child: Text('No data found')),
+                      true => ListView.builder(
+                          itemCount: state.searchResults.length,
+                          itemBuilder: (context, index) {
+                            final quote = state.searchResults[index];
+                            return ListTile(
+                              title: Text(quote.content),
+                              subtitle: Text(quote.author),
+                            );
+                          },
+                        ),
+                    },
+                  )
                 ],
               ),
       ),
