@@ -21,22 +21,21 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final state = context.watch<QuotesCubit>().state;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Best Quotes'),
+        centerTitle: true,
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.read<QuotesCubit>().refresh(),
         child: const Icon(Icons.refresh),
       ),
       body: Container(
         alignment: Alignment.center,
-        padding: const EdgeInsets.all(16).copyWith(top: 32),
+        padding: const EdgeInsets.all(16).copyWith(top: 0),
         child: state.loading
             ? const CircularProgressIndicator()
             : Column(
                 children: <Widget>[
-                  Text(
-                    'Best quote',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 16),
                   Text(state.quoteOfTheDay!.content, style: Theme.of(context).textTheme.bodyLarge),
                   const SizedBox(height: 8),
                   Text(state.quoteOfTheDay!.author, style: Theme.of(context).textTheme.bodySmall),

@@ -28,6 +28,22 @@ class QuotesCubit extends Cubit<QuotesState> {
         'query': searchController.text,
       });
       final resultsQuotes = (response.data['results'] as List).map((e) => QuoteModel.fromJson(e)).toList();
+      final allQuotes = [...resultsQuotes, ...state.searchResults];
+      emit(state.copyWith(searchResults: allQuotes, dataFound: allQuotes.isNotEmpty));
+    } catch (e) {
+      emit(state.copyWith(searchResults: [], dataFound: false));
+    }
+    try {
+      final authorsResponse = await Dio().get('https://api.quotable.io/search/authors', queryParameters: {
+        'query': searchController.text,
+      });
+      final quotesResponse = await Dio().get('https://api.quotable.io/quotes',
+          queryParameters: {'author': authorsResponse.data['results'][0]['name']});
+      final List<QuoteModel> resultsQuotes = [];
+      for (var quoteData in (quotesResponse.data as Map)['results']) {
+        resultsQuotes.add(QuoteModel.fromJson(quoteData));
+      }
+      final allQuotes = [...resultsQuotes, ...state.searchResults];
       emit(state.copyWith(searchResults: resultsQuotes, dataFound: resultsQuotes.isNotEmpty));
     } catch (e) {
       emit(state.copyWith(searchResults: [], dataFound: false));
