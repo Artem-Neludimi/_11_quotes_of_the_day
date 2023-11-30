@@ -64,7 +64,15 @@ class QuoteDao extends DatabaseAccessor<AppDatabase> with _$QuoteDaoMixin {
 
   Stream<List<Quote>> watchQuotes() => select(quotes).watch();
   Future<int> deleteQuoteById(String id) => (delete(quotes)..where((quote) => quote.id.equals(id))).go();
-  Future<int> insertQuote(Insertable<Quote> quote) => into(quotes).insert(quote);
+  Future<int> insertQuote(Insertable<Quote> quote, String insertedId) async {
+    final existingQuote = await (select(quotes)..where((q) => q.id.equals(insertedId))).getSingleOrNull();
+    if (existingQuote != null) {
+      // Quote with the same ID already exists
+      return 0; // Return 0 to indicate failure
+    } else {
+      return into(quotes).insert(quote);
+    }
+  }
 }
 
 @DriftAccessor(

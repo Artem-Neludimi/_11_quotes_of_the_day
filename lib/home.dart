@@ -24,7 +24,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final state = context.watch<QuotesCubit>().state;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Best Quotes'),
+        title: const Text('Quotes of the Day'),
         centerTitle: true,
         actions: [
           IconButton(
@@ -45,14 +45,17 @@ class _MyHomePageState extends State<MyHomePage> {
             : Column(
                 children: <Widget>[
                   ListTile(
-                    title: Text(state.quoteOfTheDay!.content),
-                    subtitle: Text(state.quoteOfTheDay!.author),
-                    trailing: IconButton(
-                      onPressed: () => db.quoteDao.insertQuote(state.quoteOfTheDay!.toDataClass()),
-                      icon: const Icon(Icons.save),
-                    ),
-                    
-                  ),
+                      title: Text(state.quoteOfTheDay!.content),
+                      subtitle: Text(state.quoteOfTheDay!.author),
+                      trailing: IconButton(
+                        onPressed: () =>
+                            db.quoteDao.insertQuote(state.quoteOfTheDay!.toDataClass(), state.quoteOfTheDay!.id),
+                        icon: const Icon(Icons.save),
+                      ),
+                      leading: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.share),
+                      )),
                   const SizedBox(height: 16),
                   TextField(
                     controller: context.read<QuotesCubit>().searchController,
@@ -74,8 +77,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             return ListTile(
                               title: Text(quote.content),
                               subtitle: Text(quote.author),
+                              leading: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.share),
+                              ),
                               trailing: IconButton(
-                                onPressed: () => db.quoteDao.insertQuote(state.quoteOfTheDay!.toDataClass()),
+                                onPressed: () => db.quoteDao.insertQuote(quote.toDataClass(), quote.id),
                                 icon: const Icon(Icons.save),
                               ),
                             );
