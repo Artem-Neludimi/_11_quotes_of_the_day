@@ -22,7 +22,7 @@ class SavedPage extends StatelessWidget {
                   title: Text(quote.content),
                   subtitle: Text(quote.author),
                   trailing: IconButton(
-                    onPressed: () => db.quoteDao.deleteQuote(snapshot.data![index]),
+                    onPressed: () => db.quoteDao.deleteQuoteById(snapshot.data![index].id),
                     icon: const Icon(Icons.delete),
                   ),
                 );

@@ -1,3 +1,4 @@
+import 'package:_11_quotes_of_the_day/main.dart';
 import 'package:_11_quotes_of_the_day/saved.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,9 +44,15 @@ class _MyHomePageState extends State<MyHomePage> {
             ? const CircularProgressIndicator()
             : Column(
                 children: <Widget>[
-                  Text(state.quoteOfTheDay!.content, style: Theme.of(context).textTheme.bodyLarge),
-                  const SizedBox(height: 8),
-                  Text(state.quoteOfTheDay!.author, style: Theme.of(context).textTheme.bodySmall),
+                  ListTile(
+                    title: Text(state.quoteOfTheDay!.content),
+                    subtitle: Text(state.quoteOfTheDay!.author),
+                    trailing: IconButton(
+                      onPressed: () => db.quoteDao.insertQuote(state.quoteOfTheDay!.toDataClass()),
+                      icon: const Icon(Icons.save),
+                    ),
+                    
+                  ),
                   const SizedBox(height: 16),
                   TextField(
                     controller: context.read<QuotesCubit>().searchController,
@@ -67,6 +74,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             return ListTile(
                               title: Text(quote.content),
                               subtitle: Text(quote.author),
+                              trailing: IconButton(
+                                onPressed: () => db.quoteDao.insertQuote(state.quoteOfTheDay!.toDataClass()),
+                                icon: const Icon(Icons.save),
+                              ),
                             );
                           },
                         ),
