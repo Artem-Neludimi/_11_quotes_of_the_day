@@ -1,6 +1,7 @@
 import 'package:_11_quotes_of_the_day/main.dart';
 import 'package:_11_quotes_of_the_day/models/quote_model.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 class SavedPage extends StatelessWidget {
   const SavedPage({super.key});
@@ -24,6 +25,12 @@ class SavedPage extends StatelessWidget {
                   trailing: IconButton(
                     onPressed: () => db.quoteDao.deleteQuoteById(snapshot.data![index].id),
                     icon: const Icon(Icons.delete),
+                  ),
+                  leading: IconButton(
+                    onPressed: () {
+                      Share.share(quote.content, subject: quote.author);
+                    },
+                    icon: const Icon(Icons.share),
                   ),
                 );
               },

@@ -2,6 +2,7 @@ import 'package:_11_quotes_of_the_day/main.dart';
 import 'package:_11_quotes_of_the_day/saved.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'quotes_cubit.dart';
 
@@ -53,7 +54,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         icon: const Icon(Icons.save),
                       ),
                       leading: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Share.share(state.quoteOfTheDay!.content, subject: state.quoteOfTheDay!.author);
+                        },
                         icon: const Icon(Icons.share),
                       )),
                   const SizedBox(height: 16),
@@ -78,7 +81,9 @@ class _MyHomePageState extends State<MyHomePage> {
                               title: Text(quote.content),
                               subtitle: Text(quote.author),
                               leading: IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Share.share(quote.content, subject: quote.author);
+                                },
                                 icon: const Icon(Icons.share),
                               ),
                               trailing: IconButton(
